@@ -1,11 +1,37 @@
+<!--
+  following tutorial: https://www.udemy.com/learn-ajax-using-javascript-jquery-in-2-hrs-2-projects/learn/v4/t/lecture/4936256
+
+To get this to work... Need to start MAMP servers, and access from here:
+http://localhost:8888/ajax_test/index.htm
+
+-->
+
 <html>
 
   <head>
     <title>AJAX test</title>
+    <script type="text/javascript">
+
+      function updateText() {
+            var current_text = document.getElementById('user_text').value;
+            var http = new XMLHttpRequest();
+            http.onreadystatechange = function() {
+              if (http.readyState == 4 && http.status == 200) {
+                var response = http.responseText;
+                document.getElementById('server_response').value = response;
+              }
+            };
+            //http.open("GET", "http://localhost:8888/ajax_test/server.php?user_text="+current_text, true)
+            http.open("GET", "server.php?user_text="+current_text, true)
+
+            http.send();
+      }
+
+      </script>
   </head>
 
   <body>
-    <div>Input text : <input type="text" id="user_text" name="user_text" /></div><br/>
+    <div>Input text : <input type="text" id="user_text" name="user_text" onkeyup="updateText();" /></div><br/>
     <div>Server resp : <input type="text" id="server_response" name="server_response" readonly></div>
   </body>
 
