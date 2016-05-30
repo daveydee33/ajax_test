@@ -4,6 +4,7 @@
 To get this to work... Need to start MAMP servers, and access from here:
 http://localhost:8888/ajax_test/index.htm
 
+NOTE: if I was going to do this again, i would just do 1 input box, with 2 different buttons to submit either by GET or by POST.
 -->
 
 <html>
@@ -12,7 +13,8 @@ http://localhost:8888/ajax_test/index.htm
     <title>AJAX test</title>
     <script type="text/javascript">
 
-      function updateText() {
+// GET method in AJAX using Javascript
+      function updateTextGET() {
             var current_text = document.getElementById('user_text').value;
             var http = new XMLHttpRequest();
             http.onreadystatechange = function() {
@@ -21,18 +23,34 @@ http://localhost:8888/ajax_test/index.htm
                 document.getElementById('server_response').value = response;
               }
             };
-            //http.open("GET", "http://localhost:8888/ajax_test/server.php?user_text="+current_text, true)
-            http.open("GET", "server.php?user_text="+current_text, true)
-
+            http.open("GET", "server.php?user_text="+current_text, true);
             http.send();
+      }
+
+// POST method in AJAX using Javascript
+      function updateTextPOST() {
+            var current_text = document.getElementById('user_text2').value;
+            var http = new XMLHttpRequest();
+            http.onreadystatechange = function() {
+              if (http.readyState == 4 && http.status == 200) {
+                var response = http.responseText;
+                document.getElementById('server_response').value = response;
+              }
+            };
+            http.open("POST", "server.php", true);
+            http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            http.send("user_text="+current_text);
       }
 
       </script>
   </head>
 
   <body>
-    <div>Input text : <input type="text" id="user_text" name="user_text" onkeyup="updateText();" /></div><br/>
+
+    <div>GET  - Input text : <input type="text" id="user_text" name="user_text" onkeyup="updateTextGET();" /></div><br/>
+    <div>POST - Input text : <input type="text" id="user_text2" name="user_text2" onkeyup="updateTextPOST();" /></div><br/>
     <div>Server resp : <input type="text" id="server_response" name="server_response" readonly></div>
+
   </body>
 
 </html>
